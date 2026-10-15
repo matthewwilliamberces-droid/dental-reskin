@@ -1,0 +1,83 @@
+---
+import { siteConfig } from '../config/site';
+
+const { brand, contact, footer, sections, ui, meta } = siteConfig;
+const tel = `tel:${contact.phone.replace(/\s/g, '')}`;
+const year = new Date().getFullYear();
+const a = contact.address;
+---
+
+<section class="bg-primary-ink text-white">
+  <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center">
+    <div class="max-w-xl">
+      <h2 class="text-2xl font-semibold sm:text-3xl">{sections.cta.title}</h2>
+      <p class="mt-2 text-white/80">{sections.cta.subtitle}</p>
+    </div>
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <button type="button" data-open-booking class="h-12 rounded-xl bg-white px-6 font-semibold text-slate-900 transition duration-200 ease-snap hover:-translate-y-0.5 active:scale-[0.97]">{ui.bookCta}</button>
+      <a href={tel} class="inline-flex h-12 items-center justify-center rounded-xl border border-white/40 px-6 font-semibold transition duration-200 hover:bg-white/10">{contact.phoneFormatted}</a>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-slate-950 text-slate-300">
+  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
+    <div>
+      <p class="font-display text-lg font-semibold text-white">{brand.name}</p>
+      <p class="mt-2 text-sm text-slate-400">{brand.tagline}</p>
+      <ul class="mt-5 space-y-2">
+        {footer.badges.map((b) => (
+          <li class="flex items-start gap-2 text-sm">
+            <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" /></svg>
+            {b}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-mono text-xs uppercase tracking-[0.2em] text-slate-400">{footer.contactTitle}</h3>
+      <address class="mt-4 space-y-1 text-sm not-italic">
+        <p>{a.line1}</p>
+        <p>{a.line2}</p>
+        <p>{a.suburb} {a.state} {a.postcode}</p>
+        <p class="pt-3"><a href={tel} class="font-semibold text-white hover:text-accent">{contact.phoneFormatted}</a></p>
+        <p><a href={`mailto:${contact.email}`} class="hover:text-accent">{contact.email}</a></p>
+      </address>
+      {contact.googleMapsEmbedUrl && (
+        <iframe
+          src={contact.googleMapsEmbedUrl}
+          title={ui.mapTitle}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="mt-5 h-40 w-full rounded-xl border-0 opacity-90"
+        ></iframe>
+      )}
+    </div>
+
+    <div>
+      <h3 class="font-mono text-xs uppercase tracking-[0.2em] text-slate-400">{footer.hoursTitle}</h3>
+      <dl class="mt-4 space-y-2 text-sm">
+        {contact.hours.map((h) => (
+          <div class="flex justify-between gap-4 border-b border-white/5 pb-2">
+            <dt>{h.days}</dt>
+            <dd class="text-right text-white">{h.time}</dd>
+          </div>
+        ))}
+      </dl>
+      <h3 class="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-slate-400">{footer.fundsTitle}</h3>
+      <ul class="mt-3 flex flex-wrap gap-2">
+        {footer.funds.map((f) => (
+          <li class="rounded-md border border-white/10 px-2.5 py-1 text-xs text-slate-300">{f}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div class="mx-auto max-w-7xl space-y-2 px-4 py-6 text-xs text-slate-400 sm:px-6">
+      <p>{footer.disclaimer}</p>
+      <p>&copy; {year} {brand.name} · {brand.abn} · {footer.legal}</p>
+    </div>
+  </div>
+</footer>

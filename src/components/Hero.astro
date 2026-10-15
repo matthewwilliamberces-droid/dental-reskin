@@ -1,0 +1,98 @@
+---
+import { siteConfig } from '../config/site';
+
+const { hero, brand, ui } = siteConfig;
+
+const star =
+  'M12 3.500l2.600 5.400 5.900.8-4.300 4.100 1 5.800L12 16.800 6.800 19.600l1-5.800L3.500 9.700l5.900-.8L12 3.500z';
+---
+
+<section id="top" class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute -right-40 -top-40 size-[34rem] rounded-full bg-primary-light blur-3xl"></div>
+    <div class="absolute -bottom-32 left-1/4 size-80 rounded-full bg-accent/10 blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto grid min-h-[calc(100dvh-6.5rem)] max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:py-20">
+    <div>
+      <p class="inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-slate-200/60 bg-white/70 px-3 py-1.5 text-xs font-medium text-slate-700 backdrop-blur-md">
+        <svg viewBox="0 0 24 24" class="size-4 text-primary-ink" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l7 3v5c0 4.500-3 8-7 10-4-2-7-5.500-7-10V6l7-3z" /><path d="M9 12l2 2 4-4" />
+        </svg>
+        {brand.licenseBadge}
+      </p>
+
+      <h1 class="delay-1 mt-6 animate-fade-in-up font-display text-4xl font-semibold leading-[1.05] text-slate-900 sm:text-5xl lg:text-6xl">
+        {hero.headline}{' '}
+        <span class="text-primary-ink">{hero.headlineAccent}</span>
+      </h1>
+
+      <p class="delay-2 mt-6 max-w-xl animate-fade-in-up text-lg leading-relaxed text-slate-600">
+        {hero.subheadline}
+      </p>
+
+      <div class="delay-3 mt-8 flex animate-fade-in-up flex-col gap-3 sm:flex-row">
+        <button type="button" data-open-booking class="inline-flex h-12 items-center justify-center rounded-xl bg-primary-ink px-6 font-semibold text-white shadow-lg shadow-primary/20 transition duration-200 ease-snap hover:-translate-y-0.5 hover:bg-surface-dark active:scale-[0.97]">
+          {hero.primaryCta}
+        </button>
+        <a href="#services" class="inline-flex h-12 items-center justify-center rounded-xl border border-slate-200/80 bg-white px-6 font-semibold text-slate-800 ring-1 ring-slate-900/[0.04] transition duration-200 ease-snap hover:border-primary hover:text-primary-ink">
+          {hero.secondaryCta}
+        </a>
+      </div>
+
+      <div class="delay-4 mt-8 flex animate-fade-in-up items-center gap-3">
+        <div class="flex text-amber-500" aria-hidden="true">
+          {Array.from({ length: 5 }).map(() => (
+            <svg viewBox="0 0 24 24" class="size-5" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d={star} /></svg>
+          ))}
+        </div>
+        <p class="text-sm font-medium text-slate-600">{hero.ratingText}</p>
+      </div>
+    </div>
+
+    <div class="delay-2 relative animate-fade-in-up">
+      <div class="hairline relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-primary-light/40 to-slate-50 p-8">
+        <svg viewBox="0 0 400 300" class="w-full text-primary-ink" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label={brand.tagline} width="400" height="300">
+          <g opacity="0.22">
+            <path d="M0 50h400M0 100h400M0 150h400M0 200h400M0 250h400M50 0v300M100 0v300M150 0v300M200 0v300M250 0v300M300 0v300M350 0v300" stroke-width="0.75" />
+          </g>
+          <path d="M40 130c40 90 100 130 160 130s120-40 160-130" />
+          <path d="M60 110c40-30 85-44 140-44s100 14 140 44" stroke-dasharray="4 6" />
+          <g>
+            <path d="M82 150l32-6 4 38c-2 10-28 12-36 2z" />
+            <path d="M120 142l34-5 3 46c-6 10-32 10-37 0z" />
+            <path d="M160 137l36-3 2 52c-8 10-34 10-38 0z" />
+            <path d="M202 134l36 3-2 50c-6 8-32 10-38 0z" />
+            <path d="M244 138l34 5-3 40c-6 10-32 10-37 0z" />
+            <path d="M282 144l32 6-6 34c-8 10-30 10-30 0z" />
+          </g>
+          <g class="animate-glow-pulse" stroke="var(--brand-accent)">
+            <circle cx="200" cy="160" r="96" stroke-dasharray="2 8" />
+          </g>
+          <path d="M200 160m-6 0h12M200 154v12" stroke="var(--brand-accent)" />
+        </svg>
+
+        <ul class="mt-6 space-y-2.5">
+          {hero.checklist.map((item) => (
+            <li class="flex items-start gap-2.5 text-sm text-slate-700">
+              <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-primary-ink" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" /></svg>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="hairline absolute -bottom-5 left-4 flex animate-subtle-float items-center gap-3 rounded-2xl bg-white/90 px-4 py-3 backdrop-blur-md sm:-left-6">
+        <span class="relative flex size-2.5" aria-hidden="true">
+          <span class="absolute inline-flex size-full animate-glow-pulse rounded-full bg-emerald-500"></span>
+          <span class="relative inline-flex size-2.5 rounded-full bg-emerald-500"></span>
+        </span>
+        <div>
+          <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">{hero.availability.label}</p>
+          <p class="text-sm font-semibold text-slate-900">{hero.availability.status}</p>
+          <p class="text-xs text-slate-500">{hero.availability.detail}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

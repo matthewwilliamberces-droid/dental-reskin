@@ -1,0 +1,254 @@
+---
+import { siteConfig } from '../config/site';
+
+const { bookingForm: bf, ui, contact, brand } = siteConfig;
+const total = ui.stepLabels.length;
+const firstProgress = `${ui.stepProgress.replace('{n}', '1').replace('{total}', String(total))} · ${ui.stepLabels[0]}`;
+
+const chip =
+  'block cursor-pointer rounded-lg border border-slate-200/80 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 ring-1 ring-slate-900/[0.04] transition duration-200 ease-snap peer-checked:border-primary-ink peer-checked:bg-primary-light peer-checked:text-primary-ink peer-focus-visible:ring-2 peer-focus-visible:ring-accent hover:border-primary/50';
+const field =
+  'mt-1.5 block h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-slate-900 outline-none transition duration-200 focus:border-primary-ink focus:ring-2 focus:ring-primary/30';
+---
+
+<dialog
+  id="booking-dialog"
+  aria-labelledby="booking-title"
+  class="m-auto w-[min(100%-1.5rem,32rem)] max-h-[100dvh] overflow-visible bg-transparent p-0 backdrop:bg-slate-950/50 backdrop:backdrop-blur-sm"
+>
+  <div id="booking-panel" class="max-h-[92dvh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl ring-1 ring-slate-900/10 sm:p-8">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 id="booking-title" class="text-2xl font-semibold text-slate-900">{bf.title}</h2>
+        <p class="mt-1 text-sm text-slate-600">{bf.subtitle}</p>
+      </div>
+      <button type="button" data-close aria-label={ui.close} class="grid size-9 shrink-0 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900">
+        <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </div>
+
+    <div class="mt-6">
+      <p
+        id="booking-progress"
+        data-template={ui.stepProgress}
+        data-names={JSON.stringify(ui.stepLabels)}
+        class="font-mono text-[10px] uppercase tracking-[0.2em] text-primary-ink"
+        aria-live="polite"
+      >{firstProgress}</p>
+      <div class="mt-2 h-1 overflow-hidden rounded-full bg-slate-100">
+        <div id="booking-bar" class="h-full origin-left bg-primary-ink transition-transform duration-200 ease-snap" style={`transform:scaleX(${1 / total})`}></div>
+      </div>
+    </div>
+
+    <form id="booking-form" class="mt-6" novalidate data-endpoint={bf.submitUrl}>
+      <input type="hidden" name="access_key" value={bf.endpoint} />
+      <input type="hidden" name="subject" value={`${brand.name}: new appointment request`} />
+      <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off" />
+
+      <fieldset data-step="1" class="min-w-0">
+        <legend class="sr-only">{ui.stepLabels[0]}</legend>
+        <div class="flex flex-wrap gap-2">
+          {bf.servicesList.map((s) => (
+            <label>
+              <input type="radio" name="treatment" value={s} class="peer sr-only" required />
+              <span class={chip}>{s}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset data-step="2" hidden class="min-w-0">
+        <legend class="sr-only">{ui.stepLabels[1]}</legend>
+        <div class="grid gap-2 sm:grid-cols-2">
+          {bf.preferredTimes.map((t) => (
+            <label>
+              <input type="radio" name="preferred_time" value={t} class="peer sr-only" required />
+              <span class={chip}>{t}</span>
+            </label>
+          ))}
+        </div>
+        <label for="bk-date" class="sr-only">{ui.stepLabels[1]}</label>
+        <input id="bk-date" type="date" name="preferred_date" class={`${field} mt-4`} />
+      </fieldset>
+
+      <fieldset data-step="3" hidden class="min-w-0 space-y-4">
+        <legend class="sr-only">{ui.stepLabels[2]}</legend>
+        <div>
+          <label for="bk-name" class="text-sm font-medium text-slate-700">{ui.nameLabel}</label>
+          <input id="bk-name" name="name" type="text" required autocomplete="name" class={field} />
+        </div>
+        <div>
+          <label for="bk-mobile" class="text-sm font-medium text-slate-700">{ui.mobileLabel}</label>
+          <input id="bk-mobile" name="mobile" type="tel" inputmode="tel" required autocomplete="tel" class={field} />
+        </div>
+        <div>
+          <label for="bk-email" class="text-sm font-medium text-slate-700">{ui.emailLabel}</label>
+          <input id="bk-email" name="email" type="email" required autocomplete="email" class={field} />
+        </div>
+        <div>
+          <label for="bk-fund" class="text-sm font-medium text-slate-700">{ui.healthFundLabel}</label>
+          <select id="bk-fund" name="health_fund" class={field}>
+            {bf.healthFunds.map((f) => <option value={f}>{f}</option>)}
+          </select>
+        </div>
+      </fieldset>
+
+      <p id="booking-error" role="alert" class="mt-4 hidden text-sm text-red-700"></p>
+
+      <div class="mt-6 flex items-center justify-between gap-3">
+        <button type="button" id="booking-back" hidden class="h-11 rounded-lg px-4 text-sm font-semibold text-slate-700 hover:bg-slate-100">{ui.back}</button>
+        <span class="flex-1"></span>
+        <button type="button" id="booking-next" data-hint={ui.chooseOne} class="h-11 rounded-lg bg-primary-ink px-6 text-sm font-semibold text-white transition duration-200 ease-snap hover:bg-surface-dark active:scale-[0.97]">{ui.next}</button>
+        <button type="submit" id="booking-submit" data-sending={ui.sending} hidden class="h-11 rounded-lg bg-primary-ink px-6 text-sm font-semibold text-white transition duration-200 ease-snap hover:bg-surface-dark active:scale-[0.97]">{ui.submit}</button>
+      </div>
+    </form>
+
+    <div id="booking-success" hidden class="py-8 text-center" role="status">
+      <span class="mx-auto grid size-14 place-items-center rounded-full bg-primary-light text-primary-ink">
+        <svg viewBox="0 0 24 24" class="size-7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" /></svg>
+      </span>
+      <h3 class="mt-4 text-xl font-semibold text-slate-900">{ui.successTitle}</h3>
+      <p class="mt-2 text-slate-600">{ui.successMessage}</p>
+      <button type="button" data-close class="mt-6 h-11 rounded-lg bg-primary-ink px-6 text-sm font-semibold text-white hover:bg-surface-dark">{ui.close}</button>
+    </div>
+
+    <span id="booking-fallback" hidden data-prefix={ui.errorMessage} data-phone={contact.phoneFormatted}></span>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('booking-dialog') as HTMLDialogElement;
+  const panel = document.getElementById('booking-panel') as HTMLElement;
+  const form = document.getElementById('booking-form') as HTMLFormElement;
+  const success = document.getElementById('booking-success') as HTMLElement;
+  const progress = document.getElementById('booking-progress') as HTMLElement;
+  const bar = document.getElementById('booking-bar') as HTMLElement;
+  const back = document.getElementById('booking-back') as HTMLButtonElement;
+  const next = document.getElementById('booking-next') as HTMLButtonElement;
+  const submit = document.getElementById('booking-submit') as HTMLButtonElement;
+  const errorEl = document.getElementById('booking-error') as HTMLElement;
+  const fallback = document.getElementById('booking-fallback') as HTMLElement;
+
+  const steps = Array.from(form.querySelectorAll<HTMLElement>('[data-step]'));
+  const names: string[] = JSON.parse(progress.dataset.names ?? '[]');
+  const template = progress.dataset.template ?? '';
+  const SPRING = { stiffness: 240, damping: 26, mass: 1 };
+  const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let step = 0;
+  let lib: Promise<typeof import('animejs')> | null = null;
+  const load = () => (lib ??= import('animejs'));
+
+  const showError = (msg: string) => {
+    errorEl.textContent = msg;
+    errorEl.classList.toggle('hidden', !msg);
+  };
+
+  const update = () => {
+    steps.forEach((s, i) => (s.hidden = i !== step));
+    back.hidden = step === 0;
+    next.hidden = step === steps.length - 1;
+    submit.hidden = step !== steps.length - 1;
+    bar.style.transform = `scaleX(${(step + 1) / steps.length})`;
+    const text = template.replace('{n}', String(step + 1)).replace('{total}', String(steps.length));
+    progress.textContent = `${text} · ${names[step] ?? ''}`;
+  };
+
+  const valid = () => {
+    const fields = Array.from(steps[step].querySelectorAll<HTMLInputElement>('input[required]'));
+    const radioNames = new Set(fields.filter((f) => f.type === 'radio').map((f) => f.name));
+    for (const n of radioNames) {
+      if (!form.querySelector(`input[name="${n}"]:checked`)) return false;
+    }
+    for (const f of fields) {
+      if (f.type !== 'radio' && !f.checkValidity()) {
+        f.focus();
+        return false;
+      }
+    }
+    return true;
+  };
+
+  next.addEventListener('click', () => {
+    showError('');
+    if (!valid()) return showError(next.dataset.hint ?? '');
+    step = Math.min(step + 1, steps.length - 1);
+    update();
+  });
+  back.addEventListener('click', () => {
+    showError('');
+    step = Math.max(step - 1, 0);
+    update();
+  });
+
+  const open = async () => {
+    panel.style.opacity = '0';
+    dialog.showModal();
+    if (reduced()) {
+      panel.style.opacity = '1';
+      return;
+    }
+    try {
+      const { animate, spring } = await load();
+      animate(panel, { opacity: [0, 1], duration: 160, ease: 'outExpo' });
+      animate(panel, { translateY: [24, 0], scale: [0.97, 1], ease: spring(SPRING) });
+    } catch {
+      panel.style.opacity = '1';
+    }
+  };
+
+  const close = async () => {
+    if (!dialog.open) return;
+    if (!reduced()) {
+      try {
+        const { animate } = await load();
+        await new Promise<void>((resolve) => {
+          animate(panel, { opacity: 0, translateY: 12, duration: 160, ease: 'outExpo', onComplete: () => resolve() });
+        });
+      } catch {
+        /* close immediately */
+      }
+    }
+    dialog.close();
+  };
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('[data-open-booking]')) open();
+    else if (t.closest('[data-close]') || t === dialog) close();
+  });
+  dialog.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    close();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showError('');
+    if (!valid()) return;
+    const data = new FormData(form);
+    if (data.get('botcheck')) return;
+    const label = submit.textContent;
+    submit.disabled = true;
+    submit.textContent = submit.dataset.sending ?? label;
+    try {
+      const res = await fetch(form.dataset.endpoint ?? '', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: data,
+      });
+      const json = await res.json().catch(() => ({ success: res.ok }));
+      if (!res.ok || json.success === false) throw new Error('send failed');
+      form.hidden = true;
+      progress.parentElement!.hidden = true;
+      success.hidden = false;
+    } catch {
+      showError(`${fallback.dataset.prefix} ${fallback.dataset.phone}.`);
+    } finally {
+      submit.disabled = false;
+      submit.textContent = label;
+    }
+  });
+
+  update();
+</script>

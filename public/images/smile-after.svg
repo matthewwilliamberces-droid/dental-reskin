@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Illustrated smile after treatment: even, bright teeth">
+  <rect width="800" height="520" fill="#e2e8f0"/>
+  <path d="M120 230c60-60 140-90 280-90s220 30 280 90c-20 120-120 190-280 190S140 350 120 230z" fill="#be8b83"/>
+  <g stroke="#cbd5e1" stroke-width="2" fill="#fbfdff">
+    <path d="M186 218l60-10 6 70c-4 16-50 18-64 2z"/>
+    <path d="M250 208l60-6 4 82c-6 16-54 16-62 0z"/>
+    <path d="M314 202l56-4 2 92c-8 14-50 14-56-2z"/>
+    <path d="M374 198l56 0 2 92c-8 14-46 16-58 2z"/>
+    <path d="M434 200l56 6-2 84c-10 14-52 12-56-2z"/>
+    <path d="M494 208l60 10-8 60c-10 16-50 14-52 0z"/>
+    <path d="M556 218l58 14-16 44c-10 12-40 8-42-6z"/>
+  </g>
+  <path d="M130 250c80 30 160 44 270 44s190-14 270-44" fill="none" stroke="#a36d66" stroke-width="3"/>
+</svg>

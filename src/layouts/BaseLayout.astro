@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import { siteConfig } from '../config/site';
+
+const { meta, brand, contact, theme } = siteConfig;
+const ogImageUrl = new URL(meta.ogImage, meta.canonicalUrl).toString();
+
+const themeVars = `:root{--brand-primary:${theme.primaryOklch};--brand-primary-light:${theme.primaryLight};--brand-accent:${theme.accentOklch};--brand-surface-dark:${theme.surfaceDark};}`;
+
+const fontsHref =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': ['Dentist', 'LocalBusiness'],
+  name: brand.name,
+  description: meta.description,
+  url: meta.canonicalUrl,
+  image: ogImageUrl,
+  telephone: contact.phone,
+  email: contact.email,
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: contact.address.line1,
+    addressLocality: contact.address.suburb,
+    addressRegion: contact.address.state,
+    postalCode: contact.address.postcode,
+    addressCountry: 'AU',
+  },
+  openingHours: contact.hours.map((h) => `${h.days}: ${h.time}`),
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: '1280',
+  },
+};
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <link rel="canonical" href={meta.canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:site_name" content={brand.name} />
+    <meta property="og:title" content={meta.title} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:url" content={meta.canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <style set:html={themeVars}></style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontsHref} media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href={fontsHref} />
+      <style>
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      </style>
+    </noscript>
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="bg-white text-slate-900 antialiased">
+    <slot />
+
+    <script>
+      // Scroll reveal: observer only, no animation library on initial load.
+      const items = document.querySelectorAll<HTMLElement>('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

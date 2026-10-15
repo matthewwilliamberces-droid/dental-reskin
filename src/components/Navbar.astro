@@ -1,0 +1,81 @@
+---
+import { siteConfig } from '../config/site';
+
+const { brand, contact, navigation, ui } = siteConfig;
+const tel = `tel:${contact.phone.replace(/\s/g, '')}`;
+---
+
+<div class="bg-surface-dark text-white">
+  <div class="mx-auto flex max-w-7xl items-center justify-center gap-2 px-4 py-2 text-center text-xs sm:text-sm">
+    <span class="relative flex size-2 shrink-0" aria-hidden="true">
+      <span class="absolute inline-flex size-full animate-glow-pulse rounded-full bg-accent"></span>
+      <span class="relative inline-flex size-2 rounded-full bg-accent"></span>
+    </span>
+    <span class="text-white/80">{brand.emergencyBannerText}</span>
+    <a href={tel} class="font-semibold text-white underline decoration-accent decoration-2 underline-offset-4 hover:text-accent">
+      {contact.phoneFormatted}
+    </a>
+  </div>
+</div>
+
+<header class="sticky top-0 z-40 border-b border-slate-100 bg-white/80 backdrop-blur-md">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6">
+    <a href="#top" class="flex items-center gap-2.5 font-display text-lg font-semibold tracking-tight text-slate-900">
+      <span class="grid size-8 place-items-center rounded-lg bg-primary-ink text-white" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12c2.500 4.500 5.500 6.500 9 6.500s6.500-2 9-6.500" />
+          <path d="M5 8.500c2 1.500 4.300 2.200 7 2.200s5-.7 7-2.200" />
+        </svg>
+      </span>
+      {brand.name}
+    </a>
+
+    <nav aria-label={ui.navLabel} class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {navigation.map((item) => (
+          <li>
+            <a href={item.href} class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors duration-200 hover:bg-slate-100 hover:text-slate-900">
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href={tel} class="hidden items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 sm:inline-flex">
+        <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 4h4l2 5-2.500 1.500a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
+        </svg>
+        {contact.phoneFormatted}
+      </a>
+      <button type="button" data-open-booking class="inline-flex h-10 items-center rounded-lg bg-primary-ink px-4 text-sm font-semibold text-white transition duration-200 ease-snap hover:bg-surface-dark active:scale-[0.97]">
+        {ui.bookCta}
+      </button>
+
+      <details class="group relative lg:hidden">
+        <summary aria-label={ui.menuLabel} class="grid size-10 cursor-pointer list-none place-items-center rounded-lg border border-slate-200 text-slate-700 [&::-webkit-details-marker]:hidden">
+          <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </summary>
+        <ul class="absolute right-0 top-12 w-56 rounded-xl border border-slate-200/80 bg-white p-2 shadow-xl ring-1 ring-slate-900/[0.04]">
+          {navigation.map((item) => (
+            <li>
+              <a href={item.href} class="block rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Close the mobile menu after choosing a link.
+  document.querySelectorAll<HTMLAnchorElement>('header details a').forEach((a) => {
+    a.addEventListener('click', () => a.closest('details')?.removeAttribute('open'));
+  });
+</script>

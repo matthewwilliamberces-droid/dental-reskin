@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--brand-primary);
+  --color-primary-light: var(--brand-primary-light);
+  --color-accent: var(--brand-accent);
+  --color-surface-dark: var(--brand-surface-dark);
+  /* Darkened primary for text and buttons on light surfaces (AA contrast) */
+  --color-primary-ink: color-mix(in oklch, var(--brand-primary) 62%, black);
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-fade-in-up: fade-in-up 420ms var(--ease-snap) both;
+  --animate-glow-pulse: glow-pulse 2.4s ease-in-out infinite;
+  --animate-subtle-float: subtle-float 6s ease-in-out infinite;
+}
+
+/* Defaults; BaseLayout overrides these from siteConfig.theme */
+:root {
+  --brand-primary: oklch(0.60 0.15 238);
+  --brand-primary-light: oklch(0.95 0.03 232);
+  --brand-accent: oklch(0.78 0.13 200);
+  --brand-surface-dark: oklch(0.20 0.04 255);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: #0f172a;
+    background: #ffffff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* GPU-only keyframes: opacity and translate3d, so CLS stays at 0 */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+}
+
+@keyframes subtle-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+@layer utilities {
+  /* Staggered entrance delays for hero children */
+  .delay-1 { animation-delay: 60ms; }
+  .delay-2 { animation-delay: 120ms; }
+  .delay-3 { animation-delay: 180ms; }
+  .delay-4 { animation-delay: 240ms; }
+
+  /* Scroll-reveal start state; JS adds .is-visible via IntersectionObserver */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition: opacity 250ms var(--ease-snap), transform 250ms var(--ease-snap);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Tactile hairline perimeter */
+  .hairline {
+    border: 1px solid rgb(226 232 240 / 0.8);
+    box-shadow: 0 0 0 1px rgb(15 23 42 / 0.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
