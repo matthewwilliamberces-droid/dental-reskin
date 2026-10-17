@@ -67,8 +67,8 @@ const field =
             </label>
           ))}
         </div>
-        <label for="bk-date" class="sr-only">{ui.stepLabels[1]}</label>
-        <input id="bk-date" type="date" name="preferred_date" class={`${field} mt-4`} />
+        <label for="bk-date" class="sr-only">Preferred appointment date</label>
+        <input id="bk-date" type="date" name="preferred_date" aria-label="Preferred appointment date" class={`${field} mt-4`} />
       </fieldset>
 
       <fieldset data-step="3" hidden class="min-w-0 space-y-4">

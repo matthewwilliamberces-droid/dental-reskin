@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import { siteConfig } from '../config/site';
 
-const { meta, brand, contact, theme } = siteConfig;
+const { meta, brand, contact, theme, faqs } = siteConfig;
 const ogImageUrl = new URL(meta.ogImage, meta.canonicalUrl).toString();
 
 const themeVars = `:root{--brand-primary:${theme.primaryOklch};--brand-primary-light:${theme.primaryLight};--brand-accent:${theme.accentOklch};--brand-surface-dark:${theme.surfaceDark};}`;
@@ -35,6 +35,19 @@ const jsonLd = {
     reviewCount: '1280',
   },
 };
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.answer,
+    },
+  })),
+};
 ---
 
 <!doctype html>
@@ -45,8 +58,13 @@ const jsonLd = {
     <meta name="generator" content={Astro.generator} />
     <title>{meta.title}</title>
     <meta name="description" content={meta.description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href={meta.canonicalUrl} />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_AU" />
@@ -59,6 +77,7 @@ const jsonLd = {
 
     <style set:html={themeVars}></style>
 
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href={fontsHref} media="print" onload="this.media='all'" />
@@ -73,6 +92,7 @@ const jsonLd = {
     </noscript>
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   </head>
   <body class="bg-white text-slate-900 antialiased">
     <slot />

@@ -17,7 +17,7 @@ const { benefits, sections } = siteConfig;
         <li class="reveal flex gap-5 py-7">
           <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-light text-primary-ink ring-1 ring-primary/15 [&>svg]:size-5" set:html={b.iconSvg} />
           <div>
-            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">{String(i + 1).padStart(2, '0')}</p>
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-600">{String(i + 1).padStart(2, '0')}</p>
             <h3 class="mt-1 text-lg font-semibold text-slate-900">{b.title}</h3>
             <p class="mt-2 text-slate-600">{b.desc}</p>
           </div>
