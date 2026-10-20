@@ -71,3 +71,17 @@ Other files: `public/images/smile-before.svg`, `public/images/smile-after.svg` (
 2. Replace the images in `public/images/` and `public/og-image.svg`.
 3. Set a real form access key in `bookingForm.endpoint`.
 4. Run `npm.cmd run build`.
+
+---
+
+## 9. Redesign update: photo-led, no SVG
+
+This section supersedes the SVG, icon and image details above.
+
+- All inline SVG and SVG files were removed (`favicon.svg`, `og-image.svg`, the before/after SVGs). The built `index.html` contains zero `<svg>` elements.
+- Nine Unsplash photos (free Unsplash License) were downloaded, resized and converted to WebP in `public/images/photos/`. `public/og-image.jpg` was generated from the hero photo.
+- `site.ts` now has a `Photo` type (`src`, `alt`, `width`, `height`), a top-level `photos` block, and `image` on each service. `iconSvg` was removed from services and benefits.
+- Services use photo cards; the featured card is a full-bleed photo with an overlay. The hero is photo-led with `fetchpriority="high"`. The comfort section pairs two photos with numbered benefits. The footer call-to-action sits over a waiting-room photo.
+- Former icons became plain CSS or text: hamburger lines, a CSS plus/minus for the FAQ, text glyphs for stars, check marks, close and the slider handle.
+- The before/after slider now compares one smile photo with a staining filter applied to the "before" side. It is a simulation, labelled as such on the page. Replace it with real case photos before publishing.
+- This reverses plan.md Rule 4 (no stock photos) and the SVG-icon rule in CLAUDE.md, at the user's request.

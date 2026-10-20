@@ -1,13 +1,23 @@
 ---
 import { siteConfig } from '../config/site';
 
-const { brand, contact, footer, sections, ui, meta } = siteConfig;
+const { brand, contact, footer, sections, ui, photos } = siteConfig;
 const tel = `tel:${contact.phone.replace(/\s/g, '')}`;
 const year = new Date().getFullYear();
 const a = contact.address;
 ---
 
-<section class="bg-primary-ink text-white">
+<section class="relative isolate overflow-hidden bg-surface-dark text-white">
+  <img
+    src={photos.waiting.src}
+    alt=""
+    width={photos.waiting.width}
+    height={photos.waiting.height}
+    loading="lazy"
+    decoding="async"
+    class="absolute inset-0 -z-10 size-full object-cover opacity-40"
+  />
+  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-surface-dark via-surface-dark/80 to-surface-dark/30"></div>
   <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center">
     <div class="max-w-xl">
       <h2 class="text-2xl font-semibold sm:text-3xl">{sections.cta.title}</h2>
@@ -28,7 +38,7 @@ const a = contact.address;
       <ul class="mt-5 space-y-2">
         {footer.badges.map((b) => (
           <li class="flex items-start gap-2 text-sm">
-            <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" /></svg>
+            <span class="mt-2 size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
             {b}
           </li>
         ))}
@@ -76,6 +86,7 @@ const a = contact.address;
 
   <div class="border-t border-white/10">
     <div class="mx-auto max-w-7xl space-y-2 px-4 py-6 text-xs text-slate-400 sm:px-6">
+      <p class="rounded-lg border border-amber-300/40 bg-amber-100/10 px-3 py-2 font-medium text-amber-200">{brand.portfolioNotice}</p>
       <p>{footer.disclaimer}</p>
       <p>&copy; {year} {brand.name} · {brand.abn} · {footer.legal}</p>
     </div>

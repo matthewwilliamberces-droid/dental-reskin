@@ -1,9 +1,16 @@
+export interface Photo {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
 export interface ServiceItem {
   id: string;
   title: string;
   shortDesc: string;
   tag: string; // e.g. "Most Popular", "Emergency", "Cosmetic"
-  iconSvg: string; // Raw clean inline SVG markup (stroke-width 1.5, currentColor)
+  image: Photo;
   durationHint?: string;
   priceFrom?: string;
 }
@@ -29,9 +36,18 @@ export interface SiteConfig {
     canonicalUrl: string;
     ogImage: string;
   };
+  photos: {
+    hero: Photo;
+    clinic: Photo;
+    scan: Photo;
+    waiting: Photo;
+    smileWide: Photo;
+  };
   brand: {
     name: string;
     tagline: string;
+    logo: string;
+    portfolioNotice: string;
     niche: string;
     abn: string;
     licenseBadge: string;
@@ -65,16 +81,16 @@ export interface SiteConfig {
     subtitle: string;
     beforeLabel: string;
     afterLabel: string;
-    beforeImage: string;
-    afterImage: string;
+    photo: Photo;
     treatmentNote: string;
   };
-  benefits: Array<{ title: string; desc: string; iconSvg: string }>;
+  benefits: Array<{ title: string; desc: string }>;
   testimonials: Testimonial[];
   faqs: FaqItem[];
   bookingForm: {
     endpoint: string; // Web3Forms or Formspree access key
     submitUrl: string;
+    demoNote: string;
     title: string;
     subtitle: string;
     servicesList: string[];
@@ -136,22 +152,29 @@ export interface SiteConfig {
   };
 }
 
-// Shared inline SVG wrapper pieces keep every icon single-tone, 1.5 stroke.
-const svg = (paths: string): string =>
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths}</svg>`;
-
 export const siteConfig: SiteConfig = {
   meta: {
     title: 'Sydney CBD Dental Studio | Gentle Dentist in Sydney NSW 2000',
     description:
       'Gentle, modern dentistry in the heart of Sydney CBD. Same-day emergency appointments, Invisalign, veneers and implants. Instant HICAPS claims and 0% interest payment plans.',
     canonicalUrl: 'https://www.sydneycbddentalstudio.com.au/',
-    ogImage: '/og-image.png',
+    ogImage: '/og-image.jpg',
+  },
+
+  photos: {
+    hero: { src: '/images/photos/hero.webp', alt: 'Dentist talking with a relaxed patient in a bright modern treatment room', width: 1400, height: 1050 },
+    clinic: { src: '/images/photos/clinic.webp', alt: 'Modern dental treatment room with chair, monitor and natural light', width: 1100, height: 735 },
+    scan: { src: '/images/photos/scan.webp', alt: 'Dentist reviewing 3D scan images of teeth on a light box', width: 1000, height: 667 },
+    waiting: { src: '/images/photos/waiting.webp', alt: 'Calm clinic waiting room with plants and soft seating', width: 1600, height: 1872 },
+    smileWide: { src: '/images/photos/smile-wide.webp', alt: 'Woman with dark wavy hair laughing with a bright white smile', width: 1100, height: 733 },
   },
 
   brand: {
     name: 'Sydney CBD Dental Studio',
     tagline: 'Gentle dentistry for people who dread the dentist.',
+    logo: '/favicon.svg',
+    portfolioNotice:
+      'Portfolio project only. This is a demonstration website, not a real dental clinic. All names, prices, reviews and contact details are fictional, and the photos are stock images.',
     niche: 'Dentist',
     abn: 'ABN 12 345 678 901',
     licenseBadge: 'AHPRA Registered Dental Practitioners',
@@ -205,61 +228,51 @@ export const siteConfig: SiteConfig = {
   services: [
     {
       id: 'smile-design',
+      image: { src: '/images/photos/smile.webp', alt: 'Close-up of a patient smiling with bright, even teeth', width: 1200, height: 800 },
       title: 'Cosmetic Smile Design',
       shortDesc:
         'Porcelain veneers, Invisalign and whitening planned together. You see a digital preview of your new smile before we touch a single tooth.',
       tag: 'Cosmetic',
-      iconSvg: svg(
-        '<path d="M3 12c2.5 4.5 5.5 6.5 9 6.5s6.5-2 9-6.5"/><path d="M5.5 9.5c1 .8 2.2 1.2 3.5 1.2M18.5 9.5c-1 .8-2.2 1.2-3.5 1.2M12 11v4"/><circle cx="12" cy="12" r="9"/>',
-      ),
       durationHint: '2 to 3 visits',
       priceFrom: 'Veneers from $1,650 per tooth',
     },
     {
       id: 'checkup',
+      image: { src: '/images/photos/checkup.webp', alt: 'Dentist examining a patient teeth with a mirror and scaler', width: 900, height: 675 },
       title: 'Check-up and Clean',
       shortDesc:
         'Full exam, digital X-rays, scale and polish. Usually fully covered by extras cover with instant HICAPS claiming.',
       tag: 'Preventive',
-      iconSvg: svg(
-        '<path d="M12 4c-2 0-3-1-5-1S4 4.500 4 7c0 3 1.500 5 2 8s.8 6 2.300 6S10 17 12 17s2.200 4 3.700 4 1.800-3 2.300-6 2-5 2-8c0-2.500-1-4-3-4s-3 1-5 1z"/>',
-      ),
       durationHint: '45 minutes',
       priceFrom: 'From $245',
     },
     {
       id: 'implants',
+      image: { src: '/images/photos/implant.webp', alt: 'Gloved hand holding a dental implant with a porcelain crown', width: 900, height: 1350 },
       title: 'Dental Implants',
       shortDesc:
         'Permanent tooth replacement placed with 3D guided planning. Most patients return to work the next day.',
       tag: 'Restorative',
-      iconSvg: svg(
-        '<path d="M8 3h8l-1 6H9L8 3z"/><path d="M9.500 9l.5 3m4-3l-.5 3M10 12h4M10.500 14.500h3M11 17h2M12 17v4"/>',
-      ),
       durationHint: '3 to 6 months start to finish',
       priceFrom: 'From $4,900',
     },
     {
       id: 'whitening',
+      image: { src: '/images/photos/smile-wide.webp', alt: 'Woman with dark wavy hair laughing with a bright white smile', width: 1100, height: 733 },
       title: 'Teeth Whitening',
       shortDesc:
         'Dentist-supervised whitening that is safe for enamel. Choose in-chair in about an hour or a custom take-home kit.',
       tag: 'Cosmetic',
-      iconSvg: svg(
-        '<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.600 5.600l2.100 2.100M16.300 16.300l2.100 2.100M5.600 18.400l2.100-2.100M16.300 7.700l2.100-2.100"/><circle cx="12" cy="12" r="3"/>',
-      ),
       durationHint: '60 minutes in-chair',
       priceFrom: 'From $490',
     },
     {
       id: 'emergency',
+      image: { src: '/images/photos/emergency.webp', alt: 'Dentist and assistant treating a patient in a clinic', width: 900, height: 1350 },
       title: 'Emergency Dental Relief',
       shortDesc:
         'Severe toothache, chipped or knocked-out tooth, lost filling. Daily appointments are held back so you are seen the same day.',
       tag: 'Same-Day Emergency',
-      iconSvg: svg(
-        '<path d="M12 3l9 16H3L12 3z"/><path d="M12 10v4M12 16.500v.01"/>',
-      ),
       durationHint: 'Seen today',
       priceFrom: 'Emergency exam from $120',
     },
@@ -271,40 +284,27 @@ export const siteConfig: SiteConfig = {
       'Drag the handle to compare. Every case starts with a 3D scan so the result you see on screen is the result we aim for.',
     beforeLabel: 'Before',
     afterLabel: 'After',
-    beforeImage: '/images/smile-before.svg',
-    afterImage: '/images/smile-after.svg',
+    photo: { src: '/images/photos/smile.webp', alt: 'Close-up of a patient smiling with bright, even teeth', width: 1200, height: 800 },
     treatmentNote:
-      'Illustrative example: six upper porcelain veneers over two visits. Results vary between patients.',
+      'Illustrative simulation: a stock photo with a staining filter applied to the left side. Ask us for genuine case photos. Results vary between patients.',
   },
 
   benefits: [
     {
       title: 'Gentle, zero-pinch numbing',
       desc: 'Computer-controlled anaesthetic delivery with numbing gel first. Sleep dentistry and nitrous oxide are available for anxious patients.',
-      iconSvg: svg(
-        '<path d="M20 14.500A8 8 0 1 1 9.500 4a6.500 6.500 0 0 0 10.500 10.500z"/>',
-      ),
     },
     {
       title: '3D intraoral scanning',
       desc: 'No gagging on impression trays. A small wand maps your teeth in about three minutes and shows you the result on screen.',
-      iconSvg: svg(
-        '<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M8 12h8M12 8v8"/>',
-      ),
     },
     {
       title: 'Upfront pricing, no surprises',
       desc: 'You receive a written, itemised quote with your health fund rebate calculated before any treatment starts.',
-      iconSvg: svg(
-        '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/>',
-      ),
     },
     {
       title: 'Low-dose digital X-rays',
       desc: 'Digital imaging uses up to 90 percent less radiation than film and appears on screen instantly.',
-      iconSvg: svg(
-        '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-      ),
     },
   ],
 
@@ -383,6 +383,7 @@ export const siteConfig: SiteConfig = {
   bookingForm: {
     endpoint: 'YOUR_WEB3FORMS_ACCESS_KEY',
     submitUrl: 'https://api.web3forms.com/submit',
+    demoNote: 'Demo only: this clinic is fictional, so no real appointment will be booked.',
     healthFunds: ['Bupa', 'Medibank', 'HCF', 'nib', 'CBHS', 'AHM', 'Other fund', 'No private cover'],
     title: 'Book your appointment',
     subtitle: 'Tell us what you need and we will confirm by phone or SMS within one business hour.',

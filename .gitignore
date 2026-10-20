@@ -27,3 +27,4 @@ ehthumbs.db
 # editor setting folders
 .idea/
 .vscode/*.log
+.claude/

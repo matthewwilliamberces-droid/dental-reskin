@@ -21,9 +21,10 @@ const field =
       <div>
         <h2 id="booking-title" class="text-2xl font-semibold text-slate-900">{bf.title}</h2>
         <p class="mt-1 text-sm text-slate-600">{bf.subtitle}</p>
+        <p class="mt-2 rounded-md bg-amber-100 px-2.5 py-1.5 text-xs font-medium text-amber-950">{bf.demoNote}</p>
       </div>
       <button type="button" data-close aria-label={ui.close} class="grid size-9 shrink-0 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900">
-        <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        <span class="text-2xl leading-none" aria-hidden="true">&times;</span>
       </button>
     </div>
 
@@ -105,7 +106,7 @@ const field =
 
     <div id="booking-success" hidden class="py-8 text-center" role="status">
       <span class="mx-auto grid size-14 place-items-center rounded-full bg-primary-light text-primary-ink">
-        <svg viewBox="0 0 24 24" class="size-7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" /></svg>
+        <span class="text-3xl leading-none" aria-hidden="true">&#10003;</span>
       </span>
       <h3 class="mt-4 text-xl font-semibold text-slate-900">{ui.successTitle}</h3>
       <p class="mt-2 text-slate-600">{ui.successMessage}</p>
