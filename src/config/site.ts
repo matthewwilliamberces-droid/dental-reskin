@@ -88,9 +88,12 @@ export interface SiteConfig {
   testimonials: Testimonial[];
   faqs: FaqItem[];
   bookingForm: {
+    isDemo: boolean;
     endpoint: string; // Web3Forms or Formspree access key
     submitUrl: string;
     demoNote: string;
+    demoSuccessBadge: string;
+    demoSuccessNotice: string;
     title: string;
     subtitle: string;
     servicesList: string[];
@@ -140,6 +143,7 @@ export interface SiteConfig {
     mapTitle: string;
     featuredLabel: string;
     durationLabel: string;
+    demoReset: string;
   };
   footer: {
     hoursTitle: string;
@@ -381,9 +385,13 @@ export const siteConfig: SiteConfig = {
   ],
 
   bookingForm: {
+    isDemo: true,
     endpoint: 'YOUR_WEB3FORMS_ACCESS_KEY',
     submitUrl: 'https://api.web3forms.com/submit',
     demoNote: 'Demo only: this clinic is fictional, so no real appointment will be booked.',
+    demoSuccessBadge: 'Demo Mode · Simulated Booking',
+    demoSuccessNotice:
+      'This interactive booking is running in simulated demo mode. In a live deployment, this form dispatches instantly to your PMS (Cliniko, Dental4Windows, Dentrix) or encrypted email.',
     healthFunds: ['Bupa', 'Medibank', 'HCF', 'nib', 'CBHS', 'AHM', 'Other fund', 'No private cover'],
     title: 'Book your appointment',
     subtitle: 'Tell us what you need and we will confirm by phone or SMS within one business hour.',
@@ -479,6 +487,7 @@ export const siteConfig: SiteConfig = {
     mapTitle: 'Map showing clinic location',
     featuredLabel: 'Most requested',
     durationLabel: 'Typical time',
+    demoReset: 'Book Another (Test)',
   },
 
   footer: {

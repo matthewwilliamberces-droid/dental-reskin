@@ -41,7 +41,7 @@ const field =
       </div>
     </div>
 
-    <form id="booking-form" class="mt-6" novalidate data-endpoint={bf.submitUrl}>
+    <form id="booking-form" class="mt-6" novalidate data-endpoint={bf.submitUrl} data-is-demo={String(bf.isDemo)}>
       <input type="hidden" name="access_key" value={bf.endpoint} />
       <input type="hidden" name="subject" value={`${brand.name}: new appointment request`} />
       <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off" />
@@ -104,13 +104,30 @@ const field =
       </div>
     </form>
 
-    <div id="booking-success" hidden class="py-8 text-center" role="status">
-      <span class="mx-auto grid size-14 place-items-center rounded-full bg-primary-light text-primary-ink">
-        <span class="text-3xl leading-none" aria-hidden="true">&#10003;</span>
+    <div id="booking-success" hidden class="py-6 text-center" role="status">
+      <span class="mx-auto grid size-14 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+        <svg class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
       </span>
-      <h3 class="mt-4 text-xl font-semibold text-slate-900">{ui.successTitle}</h3>
-      <p class="mt-2 text-slate-600">{ui.successMessage}</p>
-      <button type="button" data-close class="mt-6 h-11 rounded-lg bg-primary-ink px-6 text-sm font-semibold text-white hover:bg-surface-dark">{ui.close}</button>
+
+      <div class="mt-3.5 inline-flex items-center gap-1.5 rounded-full border border-amber-300/70 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-950">
+        <span class="size-1.5 rounded-full bg-amber-500" aria-hidden="true"></span>
+        {bf.demoSuccessBadge}
+      </div>
+
+      <h3 class="mt-3 text-xl font-semibold text-slate-900">{ui.successTitle}</h3>
+      <p class="mt-2 text-sm text-slate-600">{ui.successMessage}</p>
+
+      <div class="mt-5 rounded-xl border border-amber-200/80 bg-amber-50/70 p-3.5 text-left text-xs leading-relaxed text-amber-950">
+        <p class="font-semibold">{bf.demoNote}</p>
+        <p class="mt-1 text-amber-900/80">{bf.demoSuccessNotice}</p>
+      </div>
+
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <button type="button" data-close class="h-11 rounded-lg bg-primary-ink px-6 text-sm font-semibold text-white transition duration-200 ease-snap hover:bg-surface-dark active:scale-[0.97]">{ui.close}</button>
+        <button type="button" id="booking-reset" class="h-11 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 transition duration-200 ease-snap hover:bg-slate-50 active:scale-[0.97]">{ui.demoReset}</button>
+      </div>
     </div>
 
     <span id="booking-fallback" hidden data-prefix={ui.errorMessage} data-phone={contact.phoneFormatted}></span>
@@ -129,6 +146,7 @@ const field =
   const submit = document.getElementById('booking-submit') as HTMLButtonElement;
   const errorEl = document.getElementById('booking-error') as HTMLElement;
   const fallback = document.getElementById('booking-fallback') as HTMLElement;
+  const resetBtn = document.getElementById('booking-reset') as HTMLButtonElement | null;
 
   const steps = Array.from(form.querySelectorAll<HTMLElement>('[data-step]'));
   const names: string[] = JSON.parse(progress.dataset.names ?? '[]');
@@ -198,6 +216,18 @@ const field =
     }
   };
 
+  const resetForm = () => {
+    form.reset();
+    step = 0;
+    update();
+    form.hidden = false;
+    progress.parentElement!.hidden = false;
+    success.hidden = true;
+    showError('');
+  };
+
+  resetBtn?.addEventListener('click', resetForm);
+
   const close = async () => {
     if (!dialog.open) return;
     if (!reduced()) {
@@ -211,6 +241,7 @@ const field =
       }
     }
     dialog.close();
+    if (!success.hidden) resetForm();
   };
 
   document.addEventListener('click', (e) => {
@@ -233,16 +264,28 @@ const field =
     submit.disabled = true;
     submit.textContent = submit.dataset.sending ?? label;
     try {
-      const res = await fetch(form.dataset.endpoint ?? '', {
-        method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: data,
-      });
-      const json = await res.json().catch(() => ({ success: res.ok }));
-      if (!res.ok || json.success === false) throw new Error('send failed');
+      if (form.dataset.isDemo === 'true') {
+        await new Promise((resolve) => setTimeout(resolve, 600));
+      } else {
+        const res = await fetch(form.dataset.endpoint ?? '', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: data,
+        });
+        const json = await res.json().catch(() => ({ success: res.ok }));
+        if (!res.ok || json.success === false) throw new Error('send failed');
+      }
       form.hidden = true;
       progress.parentElement!.hidden = true;
       success.hidden = false;
+      if (!reduced()) {
+        try {
+          const { animate, spring } = await load();
+          animate(success, { opacity: [0, 1], translateY: [12, 0], ease: spring(SPRING) });
+        } catch {
+          /* fallback */
+        }
+      }
     } catch {
       showError(`${fallback.dataset.prefix} ${fallback.dataset.phone}.`);
     } finally {
