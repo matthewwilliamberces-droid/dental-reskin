@@ -47,15 +47,18 @@ const { hero, brand, photos } = siteConfig;
 
     <div class="delay-2 relative animate-fade-in-up">
       <div class="overflow-hidden rounded-[2rem] ring-1 ring-slate-900/10 shadow-2xl shadow-slate-900/10">
-        <img
-          src={photos.hero.src}
-          alt={photos.hero.alt}
-          width={photos.hero.width}
-          height={photos.hero.height}
-          fetchpriority="high"
-          decoding="async"
-          class="aspect-[4/5] size-full object-cover object-[35%_50%] sm:aspect-[4/3] lg:aspect-[5/6]"
-        />
+        <picture>
+          <source media="(max-width: 640px)" srcset="/images/photos/hero-mobile.webp" width="700" height="525" />
+          <img
+            src={photos.hero.src}
+            alt={photos.hero.alt}
+            width={photos.hero.width}
+            height={photos.hero.height}
+            fetchpriority="high"
+            decoding="async"
+            class="aspect-[4/5] size-full object-cover object-[35%_50%] sm:aspect-[4/3] lg:aspect-[5/6]"
+          />
+        </picture>
       </div>
 
       <div class="absolute -bottom-5 left-4 flex animate-subtle-float items-center gap-3 rounded-2xl border border-slate-200/60 bg-white/90 px-4 py-3 shadow-xl backdrop-blur-md sm:-left-6">

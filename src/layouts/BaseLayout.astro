@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import { siteConfig } from '../config/site';
 
-const { meta, brand, contact, theme, faqs } = siteConfig;
+const { meta, brand, contact, theme, faqs, photos } = siteConfig;
 const ogImageUrl = new URL(meta.ogImage, meta.canonicalUrl).toString();
 
 const themeVars = `:root{--brand-primary:${theme.primaryOklch};--brand-primary-light:${theme.primaryLight};--brand-accent:${theme.accentOklch};--brand-surface-dark:${theme.surfaceDark};}`;
@@ -91,6 +91,10 @@ const faqJsonLd = {
         }
       </style>
     </noscript>
+
+    <!-- Preload Hero LCP Image for Mobile and Desktop -->
+    <link rel="preload" as="image" href="/images/photos/hero-mobile.webp" type="image/webp" media="(max-width: 640px)" fetchpriority="high" />
+    <link rel="preload" as="image" href={photos.hero.src} type="image/webp" media="(min-width: 641px)" fetchpriority="high" />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
