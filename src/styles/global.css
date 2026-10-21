@@ -12,7 +12,6 @@
 
   --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
 
-  --animate-fade-in-up: fade-in-up 420ms var(--ease-snap) both;
   --animate-glow-pulse: glow-pulse 2.4s ease-in-out infinite;
   --animate-subtle-float: subtle-float 6s ease-in-out infinite;
 }
@@ -44,18 +43,7 @@
   }
 }
 
-/* GPU-only keyframes: opacity and translate3d, so CLS stays at 0 */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 14px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
+/* GPU-only keyframes for subtle ambient effects */
 @keyframes glow-pulse {
   0%, 100% {
     opacity: 0.45;
@@ -77,12 +65,6 @@
 }
 
 @layer utilities {
-  /* Staggered entrance delays for hero children */
-  .delay-1 { animation-delay: 60ms; }
-  .delay-2 { animation-delay: 120ms; }
-  .delay-3 { animation-delay: 180ms; }
-  .delay-4 { animation-delay: 240ms; }
-
   /* Scroll-reveal start state; JS adds .is-visible via IntersectionObserver */
   .reveal {
     opacity: 0;
